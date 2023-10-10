@@ -8,5 +8,7 @@ Replace <YOUR_SECRET_KEY> with a secret key for your Flask application. You can 
 
 bash
  
+run this on your terminal:
+
 
 openssl rand -hex 32
