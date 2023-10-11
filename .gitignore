@@ -8,6 +8,7 @@
 # testing
 /coverage
 /get-user-by-email
+/auth-token
 
 
 # production
