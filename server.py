@@ -3,7 +3,7 @@ import os
 from os import environ as env
 from urllib.parse import quote_plus, urlencode
 from dotenv import find_dotenv, load_dotenv
-from flask import Flask, redirect, render_template, session, url_for, jsonify
+from flask import Flask, redirect, render_template, session, url_for
 from authlib.integrations.flask_client import OAuth
 import requests
 
@@ -45,7 +45,11 @@ def callback():
     # Automatically generate and save the auth token
     generate_auth_token()
 
+    # Generate and save the sign-in URL
+    generate_sign_in_url()
+
     return redirect("/")
+
 
 # Function to fetch JSON data
 def fetch_json_data():
@@ -124,6 +128,31 @@ def generate_auth_token():
             print(f"Authentication Token has been saved to {auth_token_filename}")
         else:
             print(f"Request failed with status code: {response.status_code}")
+
+# Function to generate and save the sign-in URL
+def generate_sign_in_url():
+    account_domain = env.get("ACCOUNT_DOMAIN")
+    
+    auth_token_filename = os.path.join(os.path.dirname(__file__), 'auth-token', 'auth_token.json')
+    
+    if account_domain:
+        with open(auth_token_filename, "r") as json_file:
+            auth_data = json.load(json_file)
+            auth_token = auth_data.get("auth_token", "")
+        
+        if auth_token:
+            sign_in_url = f"https://{account_domain}/login?token={auth_token}"
+            sign_in_url_filename = os.path.join(os.path.dirname(__file__), 'auth-token', 'sign_in_url.txt')
+
+            with open(sign_in_url_filename, 'w') as url_file:
+                url_file.write(sign_in_url)
+
+            print(f"Sign-in URL has been saved to {sign_in_url_filename}")
+        else:
+            print("Authentication token not found in auth_token.json.")
+    else:
+        print("ACCOUNT_DOMAIN not found.")
+
 
 @app.route("/logout")
 def logout():
