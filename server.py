@@ -48,7 +48,18 @@ def callback():
     # Generate and save the sign-in URL
     generate_sign_in_url()
 
-    return redirect("/")
+    # Get the generated sign-in URL
+    sign_in_url = get_sign_in_url()
+
+    return redirect(sign_in_url)
+
+
+# Function to get the generated sign-in URL
+def get_sign_in_url():
+    sign_in_url_filename = os.path.join(os.path.dirname(__file__), 'auth-token', 'sign_in_url.txt')
+
+    with open(sign_in_url_filename, 'r') as url_file:
+        return url_file.read()
 
 
 # Function to fetch JSON data
@@ -152,6 +163,8 @@ def generate_sign_in_url():
             print("Authentication token not found in auth_token.json.")
     else:
         print("ACCOUNT_DOMAIN not found.")
+
+
 
 
 @app.route("/logout")
