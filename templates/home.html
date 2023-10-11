@@ -11,11 +11,15 @@
         <p><a href="/logout">Logout</a></p>
         <div><pre>{{ pretty }}</pre></div>
         {% if session.userinfo.email %}
-        <p><strong>Email:</strong> {{ session.userinfo.email }}</p>
+       <!-- Inside your HTML template -->
+<p><strong>Email:</strong> {{ session.userinfo.email }}</p>
+<p><strong>Slug:</strong> {{ slug }}</p>
+
         {% endif %}
     {% else %}
         <h1>Welcome Guest</h1>
         <p><a href="/login">Login</a></p>
     {% endif %}
+   
 </body>
 </html>
